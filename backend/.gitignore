@@ -1,6 +1,5 @@
 # Backend Dependencies
 node_modules/
-package-lock.json
 yarn.lock
 
 # Environment Variables
