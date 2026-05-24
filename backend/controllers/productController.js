@@ -36,16 +36,7 @@ export const getAllProducts = async (req, res) => {
       .skip(skip)
       .limit(pageSize);
 
-    res.status(200).json({
-      success: true,
-      data: products,
-      pagination: {
-        current: pageNum,
-        total: Math.ceil(total / pageSize),
-        count: products.length,
-        totalRecords: total,
-      },
-    });
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -64,15 +55,11 @@ export const getProductById = async (req, res) => {
 
     if (!product || !product.isActive) {
       return res.status(404).json({
-        success: false,
         message: 'Product not found',
       });
     }
 
-    res.status(200).json({
-      success: true,
-      data: product,
-    });
+    res.status(200).json(product);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -94,10 +81,7 @@ export const getProductsByCategory = async (req, res) => {
       isActive: true,
     });
 
-    res.status(200).json({
-      success: true,
-      data: products,
-    });
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -114,10 +98,7 @@ export const getAllCategories = async (req, res) => {
   try {
     const categories = await Product.distinct('category', { isActive: true });
 
-    res.status(200).json({
-      success: true,
-      data: categories.sort(),
-    });
+    res.status(200).json(categories.sort());
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -137,7 +118,6 @@ export const addReview = async (req, res) => {
 
     if (!rating || rating < 1 || rating > 5) {
       return res.status(400).json({
-        success: false,
         message: 'Rating must be between 1 and 5',
       });
     }
@@ -146,7 +126,6 @@ export const addReview = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({
-        success: false,
         message: 'Product not found',
       });
     }
@@ -158,7 +137,6 @@ export const addReview = async (req, res) => {
 
     if (existingReview) {
       return res.status(400).json({
-        success: false,
         message: 'You have already reviewed this product',
       });
     }
@@ -173,11 +151,7 @@ export const addReview = async (req, res) => {
     product.calculateRating();
     await product.save();
 
-    res.status(201).json({
-      success: true,
-      message: 'Review added successfully',
-      data: product,
-    });
+    res.status(200).json(product);
   } catch (error) {
     res.status(500).json({
       success: false,

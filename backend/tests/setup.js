@@ -1,5 +1,5 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const mongoose = require('mongoose');
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 
 let mongoServer;
 
@@ -16,6 +16,15 @@ afterAll(async () => {
   await mongoose.disconnect();
   if (mongoServer) {
     await mongoServer.stop();
+  }
+});
+
+beforeEach(async () => {
+  // Ensure database is clean before each test
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    const collection = collections[key];
+    await collection.deleteMany({});
   }
 });
 

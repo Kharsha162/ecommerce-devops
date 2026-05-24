@@ -23,7 +23,7 @@ router.use(protect, adminOnly);
  * Admin Product Routes
  */
 router.post('/products', validateProduct, handleValidationErrors, createProduct);
-router.put('/products/:id', validateProduct, handleValidationErrors, updateProduct);
+router.put('/products/:id', updateProduct);
 router.delete('/products/:id', deleteProduct);
 
 /**

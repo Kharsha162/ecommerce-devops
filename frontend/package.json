@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage --run",
+    "lint": "eslint src",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.6",
@@ -26,6 +31,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.7",
     "@vitest/ui": "^4.1.7",
     "autoprefixer": "^10.4.15",
     "eslint-plugin-react": "^7.37.5",

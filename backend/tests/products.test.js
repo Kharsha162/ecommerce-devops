@@ -1,11 +1,11 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Product = require('../models/Product');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import Product from '../models/Product.js';
 
 // Mock Express app for testing
-const app = require('../server');
+import app from '../server.js';
 
 describe('Product Routes', () => {
   let token;
@@ -36,7 +36,7 @@ describe('Product Routes', () => {
 
     // Create sample products
     await Product.create({
-      name: 'Product 1',
+      title: 'Product 1',
       description: 'Description 1',
       price: 100,
       category: 'Electronics',
@@ -80,8 +80,8 @@ describe('Product Routes', () => {
         .get(`/api/products/${product._id}`);
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('name');
-      expect(response.body.name).toBe('Product 1');
+      expect(response.body).toHaveProperty('title');
+      expect(response.body.title).toBe('Product 1');
     });
 
     it('should return 404 for non-existent product', async () => {
@@ -96,10 +96,10 @@ describe('Product Routes', () => {
   describe('POST /api/products (Admin Only)', () => {
     it('should create product as admin', async () => {
       const response = await request(app)
-        .post('/api/products')
+        .post('/api/admin/products')
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
-          name: 'New Product',
+          title: 'New Product',
           description: 'New Description',
           price: 200,
           category: 'Books',
@@ -109,15 +109,15 @@ describe('Product Routes', () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('_id');
-      expect(response.body.name).toBe('New Product');
+      expect(response.body.title).toBe('New Product');
     });
 
     it('should not create product as regular user', async () => {
       const response = await request(app)
-        .post('/api/products')
+        .post('/api/admin/products')
         .set('Authorization', `Bearer ${token}`)
         .send({
-          name: 'New Product',
+          title: 'New Product',
           description: 'New Description',
           price: 200,
           category: 'Books',
@@ -130,10 +130,10 @@ describe('Product Routes', () => {
 
     it('should validate product fields', async () => {
       const response = await request(app)
-        .post('/api/products')
+        .post('/api/admin/products')
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
-          name: 'New Product',
+          title: 'New Product',
           // missing required fields
         });
 
@@ -145,21 +145,21 @@ describe('Product Routes', () => {
     it('should update product as admin', async () => {
       const product = await Product.findOne();
       const response = await request(app)
-        .put(`/api/products/${product._id}`)
+        .put(`/api/admin/products/${product._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
-          name: 'Updated Product',
+          title: 'Updated Product',
           price: 150,
         });
 
       expect(response.status).toBe(200);
-      expect(response.body.name).toBe('Updated Product');
+      expect(response.body.title).toBe('Updated Product');
     });
 
     it('should not update product as regular user', async () => {
       const product = await Product.findOne();
       const response = await request(app)
-        .put(`/api/products/${product._id}`)
+        .put(`/api/admin/products/${product._id}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ name: 'Updated' });
 
@@ -171,20 +171,21 @@ describe('Product Routes', () => {
     it('should delete product as admin', async () => {
       const product = await Product.findOne();
       const response = await request(app)
-        .delete(`/api/products/${product._id}`)
+        .delete(`/api/admin/products/${product._id}`)
         .set('Authorization', `Bearer ${adminToken}`);
 
       expect(response.status).toBe(200);
 
-      // Verify product is deleted
+      // Verify product is soft-deleted (isActive set to false)
       const deleted = await Product.findById(product._id);
-      expect(deleted).toBeNull();
+      expect(deleted).toBeTruthy();
+      expect(deleted.isActive).toBe(false);
     });
 
     it('should not delete product as regular user', async () => {
       const product = await Product.findOne();
       const response = await request(app)
-        .delete(`/api/products/${product._id}`)
+        .delete(`/api/admin/products/${product._id}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(403);

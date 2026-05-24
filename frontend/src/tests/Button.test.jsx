@@ -26,7 +26,8 @@ describe('Button Component', () => {
   it('should have correct variant class', () => {
     const { container } = render(<Button variant="primary">Click me</Button>);
     const button = container.querySelector('button');
-    expect(button?.className).toContain('primary');
+    // Tailwind class for primary variant
+    expect(button?.className).toContain('bg-indigo-600');
   });
 
   it('should show loading state', () => {

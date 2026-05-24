@@ -1,10 +1,10 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
 
 // Mock Express app for testing
-const app = require('../server');
+import app from '../server.js';
 
 describe('Protected Routes', () => {
   let token;
@@ -158,7 +158,7 @@ describe('Protected Routes', () => {
     it('should extract user id from token', () => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'test-secret');
       expect(decoded.id).toBeTruthy();
-      expect(decoded.id).toEqual(userId);
+      expect(decoded.id).toEqual(userId.toString());
     });
   });
 });

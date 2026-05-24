@@ -18,11 +18,7 @@ export const createProduct = async (req, res) => {
       image: image || null,
     });
 
-    res.status(201).json({
-      success: true,
-      message: 'Product created successfully',
-      data: product,
-    });
+    res.status(201).json(product);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -54,16 +50,11 @@ export const updateProduct = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({
-        success: false,
         message: 'Product not found',
       });
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Product updated successfully',
-      data: product,
-    });
+    res.status(200).json(product);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -86,16 +77,11 @@ export const deleteProduct = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({
-        success: false,
         message: 'Product not found',
       });
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Product deleted successfully',
-      data: product,
-    });
+    res.status(200).json(product);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -123,15 +109,12 @@ export const getDashboardStats = async (req, res) => {
     const userCount = await User.countDocuments({ role: 'user', isActive: true });
 
     res.status(200).json({
-      success: true,
-      data: {
-        totalUsers,
-        userCount,
-        adminCount,
-        totalProducts,
-        totalInactiveProducts,
-        inventoryValue: inventoryValue.toFixed(2),
-      },
+      totalUsers,
+      userCount,
+      adminCount,
+      totalProducts,
+      totalInactiveProducts,
+      inventoryValue: inventoryValue.toFixed(2),
     });
   } catch (error) {
     res.status(500).json({
@@ -168,8 +151,7 @@ export const getAllUsers = async (req, res) => {
       .limit(pageSize);
 
     res.status(200).json({
-      success: true,
-      data: users,
+      users,
       pagination: {
         current: pageNum,
         total: Math.ceil(total / pageSize),
@@ -198,16 +180,11 @@ export const deleteUser = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        success: false,
         message: 'User not found',
       });
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'User deleted successfully',
-      data: user,
-    });
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -239,16 +216,11 @@ export const updateUserRole = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        success: false,
         message: 'User not found',
       });
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'User role updated successfully',
-      data: user,
-    });
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({
       success: false,

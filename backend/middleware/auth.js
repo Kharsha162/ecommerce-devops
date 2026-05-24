@@ -1,28 +1,37 @@
 import { verifyToken } from '../utils/jwt.js';
 import ErrorHandler from '../utils/errorHandler.js';
+import User from '../models/User.js';
 
 /**
  * Authentication Middleware
  * Verifies JWT token and attaches user info to request
  */
-export const protect = (req, res, next) => {
+export const protect = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {
       return res.status(401).json({
-        success: false,
         message: 'No token provided. Please login.',
       });
     }
 
     const decoded = verifyToken(token);
-    req.userId = decoded.id;
-    req.user = decoded;
+
+    // Load user from DB to get role and other fields
+    const user = await User.findById(decoded.id).select('-password');
+
+    if (!user) {
+      return res.status(401).json({
+        message: 'User not found',
+      });
+    }
+
+    req.userId = user._id;
+    req.user = user;
     next();
   } catch (error) {
     return res.status(401).json({
-      success: false,
       message: 'Invalid or expired token',
     });
   }
@@ -34,16 +43,14 @@ export const protect = (req, res, next) => {
  */
 export const adminOnly = (req, res, next) => {
   try {
-    if (req.user.role !== 'admin') {
+    if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({
-        success: false,
         message: 'Access denied. Admin only.',
       });
     }
     next();
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: 'Authorization error',
     });
   }
@@ -53,14 +60,17 @@ export const adminOnly = (req, res, next) => {
  * Optional Authentication Middleware
  * Attempts to authenticate but doesn't fail if token is missing
  */
-export const optionalAuth = (req, res, next) => {
+export const optionalAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (token) {
       const decoded = verifyToken(token);
-      req.userId = decoded.id;
-      req.user = decoded;
+      const user = await User.findById(decoded.id).select('-password');
+      if (user) {
+        req.userId = user._id;
+        req.user = user;
+      }
     }
 
     next();

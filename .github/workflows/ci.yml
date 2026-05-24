@@ -46,12 +46,11 @@ jobs:
 
       - name: Run frontend tests
         working-directory: ./frontend
-        run: npm test -- --coverage --run
+        run: npm run test:coverage
 
       - name: Upload frontend coverage
         uses: codecov/codecov-action@v3
         with:
-          files: ./frontend/coverage/coverage-final.json
           flags: frontend
           name: frontend-coverage
           fail_ci_if_error: false
@@ -70,13 +69,6 @@ jobs:
         env:
           MONGO_INITDB_ROOT_USERNAME: admin
           MONGO_INITDB_ROOT_PASSWORD: password
-        options: >-
-          --health-cmd "echo 'db.runCommand("ping").ok' | mongosh -u admin -p password"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
 
     steps:
       - name: Checkout code
@@ -114,7 +106,6 @@ jobs:
       - name: Upload backend coverage
         uses: codecov/codecov-action@v3
         with:
-          files: ./backend/coverage/coverage-final.json
           flags: backend
           name: backend-coverage
           fail_ci_if_error: false

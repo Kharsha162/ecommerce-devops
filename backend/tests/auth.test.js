@@ -1,12 +1,12 @@
-const request = require('supertest');
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+import request from 'supertest';
+import express from 'express';
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
 
 // Mock Express app for testing
-const app = require('../server');
+import app from '../server.js';
 
 describe('Authentication Routes', () => {
   describe('POST /api/auth/register', () => {
@@ -21,7 +21,7 @@ describe('Authentication Routes', () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('registered');
+      expect(response.body.message).toContain('Registration');
     });
 
     it('should not register user with existing email', async () => {
@@ -63,7 +63,7 @@ describe('Authentication Routes', () => {
           password: 'Password123!',
         });
 
-      const user = await User.findOne({ email: 'test@example.com' });
+      const user = await User.findOne({ email: 'test@example.com' }).select('+password');
       expect(user).toBeTruthy();
       expect(user.password).not.toBe('Password123!');
       expect(await bcrypt.compare('Password123!', user.password)).toBe(true);
