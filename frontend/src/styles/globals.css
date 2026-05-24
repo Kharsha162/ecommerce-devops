@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply select-none;
+}
+
+input, textarea, button {
+  @apply select-auto;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Glass Morphism */
+.glass {
+  @apply backdrop-blur-md bg-white/10 border border-white/20;
+}
+
+/* Smooth transitions */
+.smooth-transition {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 smooth-transition;
+}
+
+.btn-secondary {
+  @apply px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 smooth-transition;
+}
+
+/* Shadow */
+.shadow-lg-custom {
+  @apply shadow-2xl;
+}
+
+/* Gradient backgrounds */
+.gradient-primary {
+  @apply bg-gradient-to-br from-indigo-600 to-purple-600;
+}
+
+.gradient-secondary {
+  @apply bg-gradient-to-br from-pink-500 to-red-500;
+}
