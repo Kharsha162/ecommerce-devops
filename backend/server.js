@@ -15,8 +15,10 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Connect to Database
-connectDB();
+// Connect to Database (skip when running tests so test harness can control DB)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Middleware
 app.use(cors({
