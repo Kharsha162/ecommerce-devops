@@ -195,9 +195,9 @@ const ProductDetail = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Customer Reviews
             </h2>
-            {currentProduct.reviews && currentProduct.reviews.length > 0 ? (
+            {(currentProduct.reviews || []).length > 0 ? (
               <div className="space-y-4">
-                {currentProduct.reviews.map((review, index) => (
+                {(currentProduct.reviews || []).map((review, index) => (
                   <div key={index} className="bg-white p-4 rounded-lg shadow">
                     <div className="flex justify-between items-start mb-2">
                       <p className="font-semibold text-gray-800">
