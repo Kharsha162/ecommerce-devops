@@ -43,7 +43,7 @@ const AdminSidebar = ({ isOpen, onToggle, onLogout }) => {
 
         {/* Menu Items */}
         <nav className="space-y-2">
-          {menuItems.map(({ path, label, icon: Icon }) => (
+          {(menuItems || []).map(({ path, label, icon: Icon }) => (
             <Link
               key={path}
               to={path}

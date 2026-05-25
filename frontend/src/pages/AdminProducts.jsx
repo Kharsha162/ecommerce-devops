@@ -160,8 +160,8 @@ const AdminProducts = () => {
                       Loading...
                     </td>
                   </tr>
-                ) : products.length > 0 ? (
-                  products.map((product) => (
+                  ) : (products || []).length > 0 ? (
+                    (products || []).map((product) => (
                     <tr key={product._id} className="border-b hover:bg-gray-50">
                       <td className="px-6 py-4 text-gray-800 font-medium">{product.title}</td>
                       <td className="px-6 py-4 text-gray-800">${product.price}</td>

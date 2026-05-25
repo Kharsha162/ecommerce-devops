@@ -108,8 +108,8 @@ const AdminUsers = () => {
                       Loading...
                     </td>
                   </tr>
-                ) : users.length > 0 ? (
-                  users.map((u) => (
+                ) : (users || []).length > 0 ? (
+                  (users || []).map((u) => (
                     <tr key={u._id} className="border-b hover:bg-gray-50">
                       <td className="px-6 py-4 text-gray-800 font-medium">{u.name}</td>
                       <td className="px-6 py-4 text-gray-800">{u.email}</td>
