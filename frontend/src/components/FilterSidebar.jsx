@@ -47,7 +47,7 @@ const FilterSidebar = ({
           >
             All Products
           </button>
-          {categories.map((category) => (
+          {(categories || []).map((category) => (
             <button
               key={category}
               onClick={() => onCategoryChange(category)}
