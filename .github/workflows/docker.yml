@@ -104,7 +104,13 @@ jobs:
           # Update docker-compose.yml to use latest images
           sed -i 's|e-commercedevops-frontend:latest|'${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}'/ecommerce-frontend:latest|g' docker-compose.yml
           sed -i 's|e-commercedevops-backend:latest|'${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}'/ecommerce-backend:latest|g' docker-compose.yml
-          docker-compose config
+          echo "Updated docker-compose.yml with pushed image tags"
+
+      - name: Validate docker-compose file with Compose Action
+        uses: docker/compose-action@v2
+        with:
+          compose-file: docker-compose.yml
+          args: config
 
   notify:
     name: Notify Deployment Status
